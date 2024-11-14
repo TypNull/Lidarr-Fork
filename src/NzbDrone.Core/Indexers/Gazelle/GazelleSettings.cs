@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using FluentValidation;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.Validation;
@@ -21,6 +23,7 @@ namespace NzbDrone.Core.Indexers.Gazelle
         public GazelleSettings()
         {
             MinimumSeeders = IndexerDefaults.MINIMUM_SEEDERS;
+            FailDownloads = Array.Empty<int>();
         }
 
         public string AuthKey;
@@ -49,6 +52,9 @@ namespace NzbDrone.Core.Indexers.Gazelle
 
         [FieldDefinition(7, Type = FieldType.Checkbox, Label = "IndexerSettingsRejectBlocklistedTorrentHashes", HelpText = "IndexerSettingsRejectBlocklistedTorrentHashesHelpText", Advanced = true)]
         public bool RejectBlocklistedTorrentHashesWhileGrabbing { get; set; }
+
+        [FieldDefinition(8, Type = FieldType.Select, SelectOptions = typeof(FailDownloads), Label = "IndexerSettingsFailDownloads", HelpText = "IndexerSettingsFailDownloadsHelpText", Advanced = true)]
+        public IEnumerable<int> FailDownloads { get; set; }
 
         public NzbDroneValidationResult Validate()
         {

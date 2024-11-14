@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using FluentValidation;
 using NzbDrone.Core.Annotations;
@@ -21,7 +22,7 @@ namespace NzbDrone.Core.Indexers.FileList
 
     public class FileListSettings : ITorrentIndexerSettings
     {
-        private static readonly FileListSettingsValidator Validator = new ();
+        private static readonly FileListSettingsValidator Validator = new FileListSettingsValidator();
 
         public FileListSettings()
         {
@@ -33,6 +34,8 @@ namespace NzbDrone.Core.Indexers.FileList
                 (int)FileListCategories.Audio,
                 (int)FileListCategories.Flac
             };
+
+            FailDownloads = Array.Empty<int>();
         }
 
         [FieldDefinition(0, Label = "IndexerSettingsApiUrl", Advanced = true, HelpTextWarning = "IndexerSettingsApiUrlHelpText")]
@@ -54,10 +57,13 @@ namespace NzbDrone.Core.Indexers.FileList
         public int MinimumSeeders { get; set; }
 
         [FieldDefinition(7)]
-        public SeedCriteriaSettings SeedCriteria { get; set; } = new ();
+        public SeedCriteriaSettings SeedCriteria { get; set; } = new SeedCriteriaSettings();
 
         [FieldDefinition(8, Type = FieldType.Checkbox, Label = "IndexerSettingsRejectBlocklistedTorrentHashes", HelpText = "IndexerSettingsRejectBlocklistedTorrentHashesHelpText", Advanced = true)]
         public bool RejectBlocklistedTorrentHashesWhileGrabbing { get; set; }
+
+        [FieldDefinition(9, Type = FieldType.Select, SelectOptions = typeof(FailDownloads), Label = "IndexerSettingsFailDownloads", HelpText = "IndexerSettingsFailDownloadsHelpText", Advanced = true)]
+        public IEnumerable<int> FailDownloads { get; set; }
 
         public NzbDroneValidationResult Validate()
         {

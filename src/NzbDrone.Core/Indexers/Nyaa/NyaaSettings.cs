@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using FluentValidation;
 using NzbDrone.Core.Annotations;
@@ -22,6 +24,7 @@ namespace NzbDrone.Core.Indexers.Nyaa
             BaseUrl = "";
             AdditionalParameters = "&cats=2_0&filter=1";
             MinimumSeeders = IndexerDefaults.MINIMUM_SEEDERS;
+            FailDownloads = Array.Empty<int>();
         }
 
         [FieldDefinition(0, Label = "Website URL")]
@@ -42,6 +45,8 @@ namespace NzbDrone.Core.Indexers.Nyaa
         [FieldDefinition(5, Type = FieldType.Checkbox, Label = "IndexerSettingsRejectBlocklistedTorrentHashes", HelpText = "IndexerSettingsRejectBlocklistedTorrentHashesHelpText", Advanced = true)]
         public bool RejectBlocklistedTorrentHashesWhileGrabbing { get; set; }
 
+        [FieldDefinition(6, Type = FieldType.Select, SelectOptions = typeof(FailDownloads), Label = "IndexerSettingsFailDownloads", HelpText = "IndexerSettingsFailDownloadsHelpText", Advanced = true)]
+        public IEnumerable<int> FailDownloads { get; set; }
         public NzbDroneValidationResult Validate()
         {
             return new NzbDroneValidationResult(Validator.Validate(this));

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using FluentValidation;
 using NzbDrone.Common.Extensions;
@@ -33,6 +34,7 @@ namespace NzbDrone.Core.Indexers.Headphones
             BaseUrl = "https://indexer.codeshy.com";
             ApiKey = "964d601959918a578a670984bdee9357";
             Categories = new[] { 3000, 3010, 3020, 3030, 3040 };
+            FailDownloads = Array.Empty<int>();
         }
 
         public string BaseUrl { get; set; }
@@ -52,6 +54,9 @@ namespace NzbDrone.Core.Indexers.Headphones
 
         [FieldDefinition(3, Type = FieldType.Number, Label = "Early Download Limit", Unit = "days", HelpText = "Time before release date Lidarr will download from this indexer, empty is no limit", Advanced = true)]
         public int? EarlyReleaseLimit { get; set; }
+
+        [FieldDefinition(4, Type = FieldType.Select, SelectOptions = typeof(FailDownloads), Label = "IndexerSettingsFailDownloads", HelpText = "IndexerSettingsFailDownloadsHelpText", Advanced = true)]
+        public IEnumerable<int> FailDownloads { get; set; }
 
         public virtual NzbDroneValidationResult Validate()
         {

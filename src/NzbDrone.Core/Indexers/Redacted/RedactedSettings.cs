@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using FluentValidation;
 using NzbDrone.Core.Annotations;
@@ -25,6 +26,7 @@ namespace NzbDrone.Core.Indexers.Redacted
                 (int)RedactedCategory.Music
             };
             MinimumSeeders = IndexerDefaults.MINIMUM_SEEDERS;
+            FailDownloads = Array.Empty<int>();
         }
 
         [FieldDefinition(0, Label = "IndexerSettingsApiUrl", Advanced = true, HelpTextWarning = "IndexerSettingsApiUrlHelpText")]
@@ -50,6 +52,9 @@ namespace NzbDrone.Core.Indexers.Redacted
 
         [FieldDefinition(7, Type = FieldType.Checkbox, Label = "IndexerSettingsRejectBlocklistedTorrentHashes", HelpText = "IndexerSettingsRejectBlocklistedTorrentHashesHelpText", Advanced = true)]
         public bool RejectBlocklistedTorrentHashesWhileGrabbing { get; set; }
+
+        [FieldDefinition(8, Type = FieldType.Select, SelectOptions = typeof(FailDownloads), Label = "IndexerSettingsFailDownloads", HelpText = "IndexerSettingsFailDownloadsHelpText", Advanced = true)]
+        public IEnumerable<int> FailDownloads { get; set; }
 
         public NzbDroneValidationResult Validate()
         {

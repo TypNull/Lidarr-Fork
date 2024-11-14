@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -54,6 +55,7 @@ namespace NzbDrone.Core.Indexers.Newznab
         {
             ApiPath = "/api";
             Categories = new[] { 3000, 3010, 3030, 3040 };
+            FailDownloads = Array.Empty<int>();
         }
 
         [FieldDefinition(0, Label = "URL")]
@@ -74,7 +76,10 @@ namespace NzbDrone.Core.Indexers.Newznab
         [FieldDefinition(5, Label = "Additional Parameters", HelpText = "Additional Newznab parameters", Advanced = true)]
         public string AdditionalParameters { get; set; }
 
-        // Field 6 is used by TorznabSettings MinimumSeeders
+        [FieldDefinition(6, Type = FieldType.Select, SelectOptions = typeof(FailDownloads), Label = "IndexerSettingsFailDownloads", HelpText = "IndexerSettingsFailDownloadsHelpText", Advanced = true)]
+        public IEnumerable<int> FailDownloads { get; set; }
+
+        // Field 7 is used by TorznabSettings MinimumSeeders
         // If you need to add another field here, update TorznabSettings as well and this comment
         public virtual NzbDroneValidationResult Validate()
         {
